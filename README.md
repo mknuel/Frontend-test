@@ -1,26 +1,180 @@
-Recommendation Dashboard
-Overview
+# 📊 Recommendation Dashboard
+
 This is a sophisticated web application designed to display, filter, and manage a list of security and cost-saving recommendations. It features a modern, responsive interface with a robust set of functionalities including infinite scrolling, multi-tag filtering, search, user authentication, and a dark/light theme. The application is built with a focus on maintainability, testability, and a clean separation of concerns.
 
-Live DemoLogin Credentials:Username: adminPassword: passwordFeaturesSecure Authentication: Login system with token-based authentication (JWT).Infinite Scroll: Recommendations are loaded automatically as the user scrolls, ensuring a smooth and performant user experience.Advanced Filtering & Search:Full-text search across recommendation titles, descriptions, and reasons.Multi-category filtering for Cloud Providers, Frameworks, Risk Classes, and Reasons.Dynamic counts for each filter tag based on the current search results.Recommendation Management: Users can view, select, and archive/unarchive recommendations.Detailed View: A side panel provides a detailed view of any selected recommendation.Theming: Seamlessly switch between a light and dark theme, with user preference persisted.Responsive Design: A clean, modern UI that works across all screen sizes, from mobile to desktop.Notifications: User-friendly toast notifications for all key actions (login, archive, errors).Tech Stack & ArchitectureThis project is built with a modern and robust stack, chosen for its scalability and developer experience.Frontend Library: ReactLanguage: TypeScriptRouting: React Router for declarative, client-side routing.Data Fetching & State Management: TanStack Query (React Query) for managing asynchronous server state, caching, and background refetching.Styling: Tailwind CSS for a utility-first approach to building a responsive UI.Testing:Jest: As the core testing framework.React Testing Library: For writing tests that simulate real user interactions.Backend (Mock): json-server is used to provide a realistic mock API for development and testing.Project SetupTo get the project up and running on your local machine, follow these steps.PrerequisitesNode.js (v18.x or later)npm or yarnInstallation & SetupClone the repository:git clone https://your-repository-url.git
+> 👤 By Emmanuel Onyekponwane
+
+---
+
+## 🔗 Demo
+
+**Login Credentials:**\
+Username: `admin`\
+Password: `password`
+
+---
+
+## ✨ Features
+
+- **Secure Authentication**: Login system with token-based authentication (JWT).
+- **Infinite Scroll**: Automatically loads more recommendations as the user scrolls.
+- **Advanced Filtering & Search**:
+  - Full-text search across titles, descriptions, and reasons.
+  - Multi-tag filtering for cloud providers, frameworks, risk classes, and reasons.
+  - Dynamic tag counts based on filtered results.
+- **Recommendation Management**: View, archive/unarchive recommendations.
+- **Detailed Side Panel**: Detailed view for selected recommendations.
+- **Dark/Light Theme**: Theme toggle with user preference saved.
+- **Responsive Design**: Works across mobile, tablet, and desktop.
+- **User Notifications**: Friendly toast messages for all key actions.
+
+---
+
+## 🧱 Tech Stack & Architecture
+
+- **Frontend**: React + TypeScript
+- **Routing**: React Router
+- **State Management & Data Fetching**: TanStack Query (React Query)
+- **Styling**: Tailwind CSS
+- **Testing**:
+  - Jest
+  - React Testing Library
+- **Mock Backend**: json-server
+
+---
+
+## ⚙️ Project Setup
+
+### 🔧 Prerequisites
+
+- Node.js (v18 or later)
+- npm or Yarn
+
+### 🛠 Installation & Setup
+
+```bash
+git clone https://your-repository-url.git
 cd your-project-directory
 
-Install dependencies:npm install
+# Install dependencies
+npm install
 # or
 yarn install
+```
 
-Set up environment variables:Create a .env file in the root of the project and add the URL for your backend API:REACT_APP_BASE_URL=http://localhost:3001
+### 🌐 Environment Variables
 
-Start the mock backend server:The project uses json-server for a mock API. To start it, cd into the mock-server directory and run:npm run server
+Create a `.env` file in the root:
+
+```bash
+REACT_APP_BASE_URL=http://localhost:3001
+```
+
+### 🚀 Start Servers
+
+**Mock Backend:**
+
+```bash
+cd mock-server
+npm run server
 # or
 yarn server
+```
 
-This will start the backend on http://localhost:3001.Start the frontend development server:In a new terminal window, run:npm start
+Runs at `http://localhost:3001`
+
+**Frontend:**
+
+```bash
+npm start
 # or
 yarn start
+```
 
-The application will be available at http://localhost:3000.Key Architectural DecisionsCreate React App over ViteStable tooling: CRA has a more established and battle-tested setup, reducing unexpected issues in complex projects or enterprise environments.Broad ecosystem support: Some dependencies, testing libraries (e.g. Jest), and enterprise tools have more predictable integration with CRA.Built-in support for Jest: Out of the box, CRA provides a seamless Jest test setup with React Testing Library, eliminating the need for custom configuration.Fewer breaking changes: Vite evolves quickly, which can introduce breaking changes or require plugin updates, while CRA remains more conservative and predictable.Centralized State Management with Context APITo avoid "prop drilling" and manage global state cleanly, we use React's Context API for two key areas:AuthContext: Encapsulates all authentication logic, including the user's state, token management in localStorage, and login/logout functions. This keeps auth logic completely decoupled from UI components, which only need to consume the useAuth() hook.FilterContext: Manages the state for all search and filter operations across the application (e.g., on the Recommendations and Archive pages). It provides a single source of truth for all filtering parameters and the logic to update them, ensuring consistency across different pages.Declarative Server State with TanStack QueryInstead of manually managing server state with useEffect and useState, which can lead to complex and error-prone code, we use TanStack Query.useInfiniteQuery: This hook is central to our data-fetching strategy. It declaratively handles complex scenarios like cursor-based pagination for our infinite scroll feature, manages loading and error states automatically, and simplifies the logic within our components significantly.Caching and Synchronization: TanStack Query automatically handles caching, background refetching, and query invalidation. This means our data stays fresh with minimal manual intervention, and the UI feels fast and responsive by serving cached data first while fetching updates. The queryClient.invalidateQueries call after an archive/unarchive action is a perfect example of its power.Component-Based ArchitectureReusability: The UI is broken down into small, reusable components (e.g., RecommendationCard, FilterDropdown, DashboardSidebar, RecommendationLoader). This follows the DRY (Don't Repeat Yourself) principle and makes the codebase easier to manage and scale.Structural Pattern: Pages are structured with a container "Page" component (e.g., RecommendationsPage) that provides context and layout, and a child "Content" component (e.g., RecommendationsContent) that contains the core view logic. This is a clean pattern that separates concerns, making components easier to reason about.Abstracted Service LayerAll API interactions are abstracted into a dedicated service layer (e.g., recommendationService.ts, authService.ts). Components do not make fetch calls directly. This decouples the application logic from the specifics of the API. If an endpoint URL, request method, or data structure changes in the future, we only need to update the relevant service function, not every component that uses it. This also makes our data-fetching logic much easier to test in isolation.Testing ApproachThe project utilizes Jest and React Testing Library with a philosophy that favors integration tests to provide the highest confidence that the application works as users experience it.Unit Tests for Services and HelpersServices: The recommendationService.ts and authService.ts files are unit-tested to ensure that API calls are constructed with the correct URLs, headers, and bodies. The global fetch API is mocked with Jest so we can assert the request details without making actual network calls.Helpers: Pure functions like getProviderNameFromId are tested to ensure they return the correct output for a given input.To run the full test suite, use the command:npm test
+App available at `http://localhost:3000`
+
+---
+
+## 🧠 Key Architectural Decisions
+
+### 📦 Create React App vs Vite
+
+- CRA provides:
+  - Stable and battle-tested tooling
+  - Better Jest support
+  - More conservative ecosystem for long-term projects
+
+### 🌐 Centralized State with Context API
+
+- **AuthContext**: Manages token, login/logout, and auth state.
+- **FilterContext**: Centralized filtering state for search, categories, etc.
+
+### 📡 Declarative Server State with TanStack Query
+
+- **useInfiniteQuery**: For cursor-based pagination and infinite scroll
+- **Caching**: Instant UI feedback and background refetching
+
+### 🧩 Component-Based Structure
+
+- Container (`RecommendationsPage`) + Content (`RecommendationsContent`) separation
+- Reusable components like `RecommendationCard`, `FilterDropdown`, etc.
+
+### 📁 Abstracted Service Layer
+
+- All API logic in `recommendationService.ts`, `authService.ts`, etc.
+- No direct fetch calls in components
+
+---
+
+## 🧪 Testing Approach
+
+- **Unit Tests**: For services (e.g., auth, recommendations) and helper functions
+- **Integration Tests**: Simulate user interactions using React Testing Library
+
+Run all tests:
+
+```bash
+npm test
 # or
 yarn test
+```
 
-Performance ConsiderationsPerformance is a key feature of a good user experience. Several architectural choices were made with performance in mind.Infinite Scrolling with Cursor Pagination: By fetching data in chunks as the user scrolls, we avoid the performance bottleneck of loading thousands of recommendation items at once. This ensures a fast initial page load and keeps the application's memory usage low.Aggressive Caching with TanStack Query: TanStack Query automatically caches the results of API requests. When a user navigates away and then returns, the data is served instantly from the cache while a fresh request is sent in the background.Memoization with useMemo: For computations that could be expensive, such as sorting or processing the availableTags list, useMemo is used. This ensures that these operations only re-run when their dependencies change, not on every component render.User-Perceived Performance with Skeleton Loaders: On initial page load and when fetching more items, skeleton loaders (RecommendationLoader) are displayed. This provides a better User Experience (UX) than a blank screen or a simple spinner.Debouncing User Input: The search input/filters are debounced to prevent a new API call on every single keystroke. A small delay (e.g., 300ms) would ensure that the API is only queried after the user has stopped typing.Code Splitting by Route: React.lazy() and <Suspense> are used to split the application's code into smaller chunks that are loaded on demand as the user navigates to different routes.Available ScriptsIn the project directory, you can run:npm start: Runs the app in development mode.npm test: Launches the test runner in interactive watch mode.npm run build: Builds the app for production to the build folder.npm run dev: Starts the mock JSON server on port 3001 (after cd into mock-server directory).
+---
+
+## ⚡ Performance Considerations
+
+- **Infinite Scrolling**: Reduces memory and improves UX
+- **Aggressive Caching**: Data loads from cache instantly
+- **Memoization**: Optimize expensive calculations using `useMemo`
+- **Skeleton Loaders**: Prevent jarring blank states
+- **Debounced Inputs**: Prevents excessive API calls
+- **Code Splitting**: Load chunks only when needed
+
+---
+
+## 📜 Available Scripts
+
+In the project directory:
+
+### `npm start`
+
+Starts the development server.
+
+### `npm test`
+
+Launches the test runner.
+
+### `npm run build`
+
+Builds the app for production.
+
+### `npm run dev`
+
+Starts the JSON mock server (inside `mock-server` folder).
+
+---
+
+## 📖 License
+
+MIT — Feel free to use, modify, and distribute.
+
