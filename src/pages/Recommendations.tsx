@@ -155,7 +155,7 @@ const Recommendations: React.FC = () => {
 				</div>
 				<Link
 					to={"/dashboard/recommendations/archive"}
-					className="w-fit font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-sm flex gap-2 items-center  btn absolute top-3 right-3">
+					className="w-fit font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-sm flex gap-2 items-center  btn absolute top-0 md:top-3 right-3">
 					<Archive size={14} />
 					<span>Archive</span>
 				</Link>

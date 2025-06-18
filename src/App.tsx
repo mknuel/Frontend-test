@@ -73,6 +73,7 @@ function App() {
 							transition={Bounce}
 						/>
 						<Routes>
+							<Route path="/" element={<Navigate to="/login" replace />} />
 							<Route path="/login" element={<LoginPage />} />
 
 							<Route
@@ -97,7 +98,7 @@ function App() {
 						</Routes>
 					</AuthProvider>
 				</ThemeProvider>
-				{/* Optional: React Query Devtools for easier debugging */}
+				{/* Tanstack React Query Devtools for easier debugging */}
 				<ReactQueryDevtools initialIsOpen={false} />
 			</QueryClientProvider>
 		</Router>

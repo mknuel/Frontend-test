@@ -1,5 +1,4 @@
-// src/components/filters/FilterDropdown.tsx
-import React, { useMemo } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import { Funnel, XCircle } from "lucide-react";
 import { useFilters } from "../../context/FilterContext";
 
@@ -29,9 +28,22 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
 		toggleReason,
 		clearAllFilters,
 		activeFilterCount,
-		tagCounts, // Get the counts from the context
-		isCountLoading, // Get the loading state for counts
+		tagCounts,
+		isCountLoading,
 	} = useFilters();
+
+	// Debounced term
+	const [debouncedTerm, setDebouncedTerm] = useState(filterSearchTerm);
+
+	useEffect(() => {
+		const handler = setTimeout(() => {
+			setDebouncedTerm(filterSearchTerm);
+		}, 300);
+
+		return () => {
+			clearTimeout(handler);
+		};
+	}, [filterSearchTerm]);
 
 	const getFilteredItems = (items: string[], term: string) => {
 		if (!term) return items;
@@ -40,20 +52,20 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
 	};
 
 	const filteredProviders = useMemo(
-		() => getFilteredItems(availableProviders, filterSearchTerm),
-		[availableProviders, filterSearchTerm]
+		() => getFilteredItems(availableProviders, debouncedTerm),
+		[availableProviders, debouncedTerm]
 	);
 	const filteredFrameworks = useMemo(
-		() => getFilteredItems(availableFrameworks, filterSearchTerm),
-		[availableFrameworks, filterSearchTerm]
+		() => getFilteredItems(availableFrameworks, debouncedTerm),
+		[availableFrameworks, debouncedTerm]
 	);
 	const filteredRiskClasses = useMemo(
-		() => getFilteredItems(availableRiskClasses, filterSearchTerm),
-		[availableRiskClasses, filterSearchTerm]
+		() => getFilteredItems(availableRiskClasses, debouncedTerm),
+		[availableRiskClasses, debouncedTerm]
 	);
 	const filteredReasons = useMemo(
-		() => getFilteredItems(availableReasons, filterSearchTerm),
-		[availableReasons, filterSearchTerm]
+		() => getFilteredItems(availableReasons, debouncedTerm),
+		[availableReasons, debouncedTerm]
 	);
 
 	const totalFilteredItems =
@@ -89,7 +101,6 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
 								/>
 								<span className="text-xs capitalize">{item}</span>
 							</div>
-							{/* Display the count */}
 							<span className="text-xs text-gray-500">
 								({tagCounts[item] || 0})
 							</span>
@@ -173,8 +184,7 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
 								selectedReasons,
 								toggleReason
 							)}
-
-							{totalFilteredItems === 0 && filterSearchTerm && (
+							{totalFilteredItems === 0 && debouncedTerm && (
 								<p className="text-gray-500 text-sm text-center py-4">
 									No matching filters found.
 								</p>

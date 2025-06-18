@@ -64,3 +64,4 @@ export interface ArchiveSuccessResponse {
 	message: string;
 	recommendation?: Recommendation;
 }
+

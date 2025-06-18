@@ -1,6 +1,11 @@
 import { ApiResponse, Recommendation } from "./../types/recommendation";
 
-const API_BASE_URL = process.env.REACT_APP_BASE_URL;
+const API_BASE_URL = "http://localhost:3001";
+// 
+interface ArchiveSuccessResponse {
+	message: string;
+	recommendation?: Recommendation;
+}
 
 // This helper function is useful for displaying provider names in the UI.
 export const getProviderNameFromId = (id: number): string => {
@@ -16,7 +21,7 @@ export const getProviderNameFromId = (id: number): string => {
 	}
 };
 
-// Function for fetching filter toptions
+// Function for fetching filter 
 export const getAllRecommendationsForCounting = async (
 	searchTerm: string = ""
 ): Promise<Recommendation[]> => {
@@ -120,10 +125,6 @@ export const getArchivedRecommendations = async (
 	return response.json();
 };
 
-interface ArchiveSuccessResponse {
-	message: string;
-	recommendation?: Recommendation;
-}
 
 export const archiveRecommendation = async (
 	id: string

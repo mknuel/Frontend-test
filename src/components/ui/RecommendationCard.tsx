@@ -19,12 +19,12 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({
 	onArchiveAction,
 	isArchived = false,
 }) => {
-	const handleArchiveClick = (e: React.MouseEvent) => {
+	/* const handleArchiveClick = (e: React.MouseEvent) => {
 		e.stopPropagation(); // Prevent card click from opening detail panel
 		if (onArchiveAction) {
 			onArchiveAction(recommendation.id, !isArchived);
 		}
-	};
+	}; */
 
 	const providerIcons: { [key: string]: JSX.Element } = {
 		"provider-0": <></>, // Unspecified
@@ -39,11 +39,11 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({
         hover:shadow-xl transition-all duration-300 overflow-hidden
         `}
 			onClick={onClick}>
-			<button
+			{/* <button
 				onClick={handleArchiveClick}
 				className="w-fit font-medium py-2 px-2 rounded-lg transition-colors duration-200 text-sm flex gap-2 items-center absolute top-2 left-2 border bg-white/20 ">
 				<Archive size={14} color="white" />
-			</button>
+			</button> */}
 
 			<div className="flex h-full">
 				<div
