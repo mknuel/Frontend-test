@@ -1,46 +1,86 @@
-# Getting Started with Create React App
+Recommendation Dashboard
+Overview
+This is a sophisticated web application designed to display, filter, and manage a list of security and cost-saving recommendations. It features a modern, responsive interface with a robust set of functionalities including infinite scrolling, multi-tag filtering, search, user authentication, and a dark/light theme. The application is built with a focus on maintainability, testability, and a clean separation of concerns.
+Table of Contents
+Live Demo
+Features
+Tech Stack & Architecture
+Project Setup
+Key Architectural Decisions
+Testing Approach
+Performance Considerations
+Available Scripts
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Demo
+Login Credentials:
+Username: admin
+Password: password
 
-## Available Scripts
 
-In the project directory, you can run:
+Features
+Secure Authentication: Login system with token-based authentication (JWT).
+Infinite Scroll: Recommendations are loaded automatically as the user scrolls, ensuring a smooth and performant user experience.
+Advanced Filtering & Search:
+Full-text search across recommendation titles, descriptions, and reasons.
+Multi-category filtering for Cloud Providers, Frameworks, Risk Classes, and Reasons.
+Dynamic counts for each filter tag based on the current search results.
+Recommendation Management: Users can view, select, and archive/unarchive recommendations.
+Detailed View: A side panel provides a detailed view of any selected recommendation.
+Theming: Seamlessly switch between a light and dark theme, with user preference persisted.
+Responsive Design: A clean, modern UI that works across all screen sizes, from mobile to desktop.
+Notifications: User-friendly toast notifications for all key actions (login, archive, errors).
 
-### `npm start`
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Tech Stack & Architecture
+This project is built with a modern and robust stack, chosen for its scalability and developer experience.
+Frontend Library: React
+Language: TypeScript
+Routing: React Router for declarative, client-side routing.
+Data Fetching & State Management: TanStack Query (React Query) for managing asynchronous server state, caching, and background refetching.
+Styling: Tailwind CSS for a utility-first approach to building a responsive UI.
+Testing:
+Jest: As the core testing framework.
+React Testing Library: For writing tests that simulate real user interactions.
+Backend (Mock): json-server is used to provide a realistic mock API for development and testing.
+Project Setup
+To get the project up and running on your local machine, follow these steps.
+Prerequisites
+Node.js (v18.x or later)
+npm or yarn
+Installation & Setup
+Clone the repository:
+git clone [https://your-repository-url.git](https://your-repository-url.git)
+cd your-project-directory
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
 
-### `npm test`
+Install dependencies:
+npm install
+# or
+yarn install
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `npm run build`
+Set up environment variables:
+Create a .env file in the root of the project and add the URL for your backend API:
+REACT_APP_BASE_URL=http://localhost:3001
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Start the mock backend server:
+The project uses json-server for a mock API. To start it, go into the directory, mock-server
+run:
+npm run server
+# or
+yarn server
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+This will start the backend on http://localhost:3001.
+Start the frontend development server:
+In a new terminal window, run:
+npm start
+# or
+yarn start
 
-### `npm run eject`
+The application will be available at http://localhost:3000.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Key Architectural Decisions
+Separation of Concerns with Context API:
+AuthContext: Encapsulates all authentication logic, including the user's state, token management in localStorage, and login/logout functions. This keeps auth logic completely decoupled from the UI components.
+FilterContext: Manages the state for all search and filter operations across the application (Recommendations and Archive pages). This prevents "prop drilling" and provides a single source of truth for all filtering parameters.
