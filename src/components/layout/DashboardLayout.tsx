@@ -1,21 +1,14 @@
 // src/components/layout/DashboardLayout.tsx
-import React, { ReactNode } from "react";
-import { Link, Outlet, useLocation } from "react-router-dom";
+import React from "react";
+import { Outlet } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
-import { useAuth } from "../../context/AuthContext";
 import Sidebar from "./DashboardSidebar";
 import { FilterProvider } from "../../context/FilterContext";
-
-// Icons (you might need to install a library like 'react-icons' or use SVGs)
-// For now, we'll use simple text/placeholders.
-// To use actual icons, you'd do:
-// npm install react-icons
-// import { FaHome, FaArchive, FaCog, FaSignOutAlt, FaShieldAlt } from 'react-icons/fa';
 
 interface DashboardLayoutProps {}
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
-	const { theme, toggleTheme } = useTheme();
+	const { theme } = useTheme();
 
 	return (
 		<FilterProvider>

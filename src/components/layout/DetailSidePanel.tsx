@@ -54,35 +54,6 @@ const DetailSidePanel: React.FC<DetailSidePanelProps> = ({
 		"provider-3": <GcpIcon className="w-6 h-6" />,
 	};
 
-	const renderList = (
-		items: { name: string; href?: string }[] | string[] | undefined,
-		keyPrefix: string
-	) => {
-		if (!items || items.length === 0)
-			return <span className="text-gray-500 dark:text-gray-400">N/A</span>;
-		return (
-			<ul className="list-disc list-inside text-gray-600 dark:text-gray-400 text-sm">
-				{items.map((item, index) => (
-					<li key={`${keyPrefix}-${index}`}>
-						{typeof item === "string" ? (
-							item
-						) : item.href ? (
-							<a
-								href={item.href}
-								target="_blank"
-								rel="noopener noreferrer"
-								className="text-blue-500 hover:underline">
-								{item.name}
-							</a>
-						) : (
-							item.name
-						)}
-					</li>
-				))}
-			</ul>
-		);
-	};
-
 	return (
 		<div className="fixed inset-0 z-[999] flex justify-end">
 			<div
@@ -135,13 +106,13 @@ const DetailSidePanel: React.FC<DetailSidePanelProps> = ({
 											className="ml-4 inline-flex items-center">
 											{providerIcons?.[`provider-${providerId}`]}
 											<strong className="ml-1">
-												{providerId == 0
+												{providerId === 0
 													? "Unspecified"
-													: providerId == 1
+													: providerId === 1
 													? "AWS"
-													: providerId == 2
+													: providerId === 2
 													? "Azure"
-													: providerId == 3
+													: providerId === 3
 													? "GCP"
 													: ""}{" "}
 												Environment
@@ -266,6 +237,7 @@ const DetailSidePanel: React.FC<DetailSidePanelProps> = ({
 						{recommendation?.furtherReading?.map((item, index) => (
 							<a
 								target="_blank"
+								rel="noreferrer"
 								href={item?.href}
 								key={`read-${index}`}
 								className="px-3 py-1 bg-gray-200 text-gray-800 rounded-full text-xs font-medium whitespace-pre first-letter:capitalize">
