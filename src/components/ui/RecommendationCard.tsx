@@ -1,7 +1,7 @@
 // src/components/ui/RecommendationCard.tsx
 import React, { JSX } from "react";
 import { Recommendation } from "../../types/recommendation";
-import { Archive, Box } from "lucide-react";
+import { /* Archive, */ Box } from "lucide-react";
 import { ReactComponent as AWSIcon } from "../../assets/icons/aws.svg";
 import { ReactComponent as AzureIcon } from "../../assets/icons/azure.svg";
 import { ReactComponent as GcpIcon } from "../../assets/icons/gcp.svg";
@@ -16,7 +16,7 @@ interface RecommendationCardProps {
 const RecommendationCard: React.FC<RecommendationCardProps> = ({
 	recommendation,
 	onClick,
-	onArchiveAction,
+	// onArchiveAction,
 	isArchived = false,
 }) => {
 	/* const handleArchiveClick = (e: React.MouseEvent) => {
