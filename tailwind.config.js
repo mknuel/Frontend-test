@@ -11,7 +11,7 @@ module.exports = {
 				"gray-900": "#191919",
 			},
 			fontFamily: {
-				myfont: ["Helvetica", "sans-serif"],
+				helvetica: ["Helvetica", "sans-serif"],
 			},
 		},
 	},

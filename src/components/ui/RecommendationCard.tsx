@@ -9,20 +9,20 @@ import { ReactComponent as GcpIcon } from "../../assets/icons/gcp.svg";
 interface RecommendationCardProps {
 	recommendation: Recommendation;
 	onClick?: () => void;
-	onArchiveUnarchive?: (id: string, isArchiving: boolean) => void;
+	onArchiveAction?: (id: string, isArchiving: boolean) => void;
 	isArchived?: boolean;
 }
 
 const RecommendationCard: React.FC<RecommendationCardProps> = ({
 	recommendation,
 	onClick,
-	onArchiveUnarchive,
+	onArchiveAction,
 	isArchived = false,
 }) => {
 	const handleArchiveClick = (e: React.MouseEvent) => {
 		e.stopPropagation(); // Prevent card click from opening detail panel
-		if (onArchiveUnarchive) {
-			onArchiveUnarchive(recommendation.id, !isArchived);
+		if (onArchiveAction) {
+			onArchiveAction(recommendation.id, !isArchived);
 		}
 	};
 
@@ -31,26 +31,6 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({
 		"provider-1": <AWSIcon className="w-6 h-6" />, // AWS
 		"provider-2": <AzureIcon className="w-6 h-6" />, // Azure
 		"provider-3": <GcpIcon className="w-6 h-6" />, // GCP
-	};
-
-	// Map class to a more readable category or just use title parts for tags if needed
-	const getCategoryFromClass = (classNum: number): string => {
-		switch (classNum) {
-			case 1:
-				return "Compute";
-			case 2:
-				return "Network";
-			case 3:
-				return "Data Protection";
-			case 4:
-				return "Application";
-			case 5:
-				return "Authentication";
-			case 6:
-				return "Compliance";
-			default:
-				return "Unspecified";
-		}
 	};
 
 	return (

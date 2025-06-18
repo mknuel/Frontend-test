@@ -1,5 +1,3 @@
-// src/types/recommendation.ts
-
 // Define interfaces for nested objects first
 export interface Framework {
 	name: string;
@@ -29,26 +27,26 @@ export interface ImpactAssessment {
 
 // Main Recommendation interface
 export interface Recommendation {
-	id: string; // Changed from recommendationId for consistency with previous usage in React components
+	id: string;
 	tenantId: string;
-	recommendationId: string; // Keep this if you need it separately
+	recommendationId: string;
 	title: string;
 	slug: string;
 	description: string;
 	score: number;
-	provider: number[]; // Assuming it's an array of numbers like [1] or [2]
-	frameworks?: Framework[]; // Optional, as some might not have it or it could be empty
-	reasons?: string[]; // Optional
-	furtherReading?: FurtherReading[]; // Optional
+	provider: number[];
+	frameworks?: Framework[];
+	reasons?: string[];
+	furtherReading?: FurtherReading[];
 	totalHistoricalViolations: number;
-	affectedResources?: AffectedResource[]; // Optional
-	impactAssessment?: ImpactAssessment; // Optional
-	class: number; // Renamed from 'category' as per your data, using a number for 'class'
-	severity: "Critical" | "High" | "Medium" | "Low"; // Added from card logic, assuming it's derived or implicit
-	status: "Open" | "Resolved" | "Archived"; // Added from card logic, assuming it's derived or implicit
-	dateCreated: string; // Added from card logic, assuming it exists or is derived
-	lastUpdated: string; // Added from card logic, assuming it exists or is derived
-	tags?: string[]; // Added from card logic, assuming it exists or is derived
+	affectedResources?: AffectedResource[];
+	impactAssessment?: ImpactAssessment;
+	class: number;
+	severity: "Critical" | "High" | "Medium" | "Low";
+	status: "Open" | "Resolved" | "Archived";
+	dateCreated: string;
+	lastUpdated: string;
+	tags?: string[];
 }
 
 export interface ApiResponse {

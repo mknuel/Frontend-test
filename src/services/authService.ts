@@ -1,5 +1,4 @@
-// src/services/authService.ts
-const API_BASE_URL = "http://localhost:3001";
+const API_BASE_URL = process.env.REACT_APP_BASE_URL;
 
 interface LoginSuccessResponse {
 	token: string;

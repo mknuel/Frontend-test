@@ -1,23 +1,8 @@
-// src/services/recommendationService.ts
 import { ApiResponse, Recommendation } from "./../types/recommendation";
 
-const API_BASE_URL = "http://localhost:3001";
+const API_BASE_URL = process.env.REACT_APP_BASE_URL;
 
-// Helper function for mapping provider names to IDs
-const getProviderIdFromName = (name: string): number | undefined => {
-	switch (name.toLowerCase()) {
-		case "aws":
-			return 1;
-		case "azure":
-			return 2;
-		case "unspecified":
-			return 0; // Assuming 0 for unspecified
-		default:
-			return undefined;
-	}
-};
-
-// Helper function for mapping provider IDs to names (for UI display)
+// This helper function is useful for displaying provider names in the UI.
 export const getProviderNameFromId = (id: number): string => {
 	switch (id) {
 		case 1:
@@ -31,26 +16,54 @@ export const getProviderNameFromId = (id: number): string => {
 	}
 };
 
+// Function for fetching filter toptions
+export const getAllRecommendationsForCounting = async (
+	searchTerm: string = ""
+): Promise<Recommendation[]> => {
+	const url = new URL(`${API_BASE_URL}/recommendations`);
+	// Use a very high limit to simulate fetching all items for accurate counts.
+	url.searchParams.append("limit", "10000");
+	if (searchTerm) {
+		url.searchParams.append("search", searchTerm);
+	}
+	const response = await fetch(url.toString());
+	if (!response.ok) {
+		throw new Error("Failed to fetch data for counts");
+	}
+	const result: ApiResponse = await response.json();
+	return result.data;
+};
+
 export const getRecommendations = async (
-	page: number = 1,
+	cursor: string | null = null,
 	limit: number = 10,
 	searchTerm: string = "",
-	selectedProviders: string[] = []
+	selectedProviders: string[] = [],
+	selectedFrameworks: string[] = [],
+	selectedRiskClasses: string[] = [],
+	selectedReasons: string[] = []
 ): Promise<ApiResponse> => {
-	let url = new URL(`${API_BASE_URL}/recommendations`);
-	url.searchParams.append("_page", page.toString());
-	url.searchParams.append("_limit", limit.toString());
+	const url = new URL(`${API_BASE_URL}/recommendations`);
+	url.searchParams.append("limit", limit.toString());
 
-	if (searchTerm) {
-		url.searchParams.append("q", searchTerm);
+	if (cursor) {
+		url.searchParams.append("cursor", cursor);
 	}
 
-	selectedProviders.forEach((providerName) => {
-		const providerId = getProviderIdFromName(providerName);
-		if (typeof providerId === "number") {
-			url.searchParams.append("tags", providerId.toString());
-		}
-	});
+	if (searchTerm) {
+		url.searchParams.append("search", searchTerm);
+	}
+
+	const allTags = [
+		...selectedProviders,
+		...selectedFrameworks,
+		...selectedRiskClasses,
+		...selectedReasons,
+	];
+
+	if (allTags.length > 0) {
+		url.searchParams.append("tags", allTags.join(","));
+	}
 
 	const response = await fetch(url.toString());
 	if (!response.ok) {
@@ -62,27 +75,38 @@ export const getRecommendations = async (
 	return response.json();
 };
 
-// FIX: Modified getArchivedRecommendations to accept search and providers
+// FIX: This function is now also updated to use cursor-based pagination.
 export const getArchivedRecommendations = async (
+	cursor: string | null = null, // Changed from page: number
+	limit: number = 10,
 	searchTerm: string = "",
 	selectedProviders: string[] = [],
-	page: number = 1,
-	limit: number = 10
+	selectedFrameworks: string[] = [],
+	selectedRiskClasses: string[] = [],
+	selectedReasons: string[] = []
 ): Promise<ApiResponse> => {
-	let url = new URL(`${API_BASE_URL}/recommendations/archive?`);
-	url.searchParams.append("_page", page.toString());
-	url.searchParams.append("_limit", limit.toString());
+	const url = new URL(`${API_BASE_URL}/recommendations/archive`);
+	url.searchParams.append("limit", limit.toString());
 
-	if (searchTerm) {
-		url.searchParams.append("q", searchTerm);
+	// Send the cursor to the API if it exists.
+	if (cursor) {
+		url.searchParams.append("cursor", cursor);
 	}
 
-	selectedProviders.forEach((providerName) => {
-		const providerId = getProviderIdFromName(providerName);
-		if (typeof providerId === "number") {
-			url.searchParams.append("tags", providerId.toString());
-		}
-	});
+	if (searchTerm) {
+		url.searchParams.append("search", searchTerm);
+	}
+
+	const allTags = [
+		...selectedProviders,
+		...selectedFrameworks,
+		...selectedRiskClasses,
+		...selectedReasons,
+	];
+
+	if (allTags.length > 0) {
+		url.searchParams.append("tags", allTags.join(","));
+	}
 
 	const response = await fetch(url.toString());
 	if (!response.ok) {
