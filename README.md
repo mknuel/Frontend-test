@@ -1,6 +1,6 @@
 # 📊 Recommendation Dashboard
 
-This is a sophisticated web application designed to display, filter, and manage a list of security and cost-saving recommendations. It features a modern, responsive interface with a robust set of functionalities including infinite scrolling, multi-tag filtering, search, user authentication, and a dark/light theme. The application is built with a focus on maintainability, testability, and a clean separation of concerns.
+This is a web application designed to display, filter, and manage a list of security and cost-saving recommendations. It features a modern, responsive interface with a robust set of functionalities including infinite scrolling, multi-tag filtering, search, user authentication, and a dark/light theme. The application is built with a focus on maintainability, testability, and a clean separation of concerns.
 
 > 👤 By Emmanuel Onyekponwane
 
@@ -53,8 +53,8 @@ Password: `password`
 ### 🛠 Installation & Setup
 
 ```bash
-git clone https://your-repository-url.git
-cd your-project-directory
+git clone https://your-repository-url.git](https://github.com/mknuel/Frontend-test.git
+cd frontend-test
 
 # Install dependencies
 npm install
@@ -76,9 +76,9 @@ REACT_APP_BASE_URL=http://localhost:3001
 
 ```bash
 cd mock-server
-npm run server
+npm run dev
 # or
-yarn server
+yarn dev
 ```
 
 Runs at `http://localhost:3001`
@@ -172,6 +172,9 @@ Builds the app for production.
 
 Starts the JSON mock server (inside `mock-server` folder).
 
+
+## Comprehensive Documentation here
+https://docs.google.com/document/d/1ozn5JkHvZvDMJLaq2lCzn95ZCQ2uZB2C6rnyJLb1ecM/edit?usp=sharing
 ---
 
 ## 📖 License
