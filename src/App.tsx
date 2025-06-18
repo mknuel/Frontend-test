@@ -9,8 +9,7 @@ import {
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import LoginPage from "./pages/LoginPage";
-import Dashboard from "./pages/Dashboard";
-import ArchivePage from "./pages/ArchivePage";
+import ArchivePage from "./pages/RecommendationsArchive";
 import NotFoundPage from "./pages/NotFound";
 import "./index.css";
 
@@ -18,6 +17,8 @@ import "./index.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"; // Optional: for dev tools
 import { Bounce, ToastContainer } from "react-toastify";
+import DashboardLayout from "./components/layout/DashboardLayout";
+import Recommendations from "./pages/Recommendations";
 
 const queryClient = new QueryClient({
 	defaultOptions: {
@@ -72,28 +73,32 @@ function App() {
 							transition={Bounce}
 						/>
 						<Routes>
+							<Route path="/" element={<Navigate to="/login" replace />} />
 							<Route path="/login" element={<LoginPage />} />
+
 							<Route
-								path="/"
+								path="/dashboard"
 								element={
 									<PrivateRoute>
-										<Dashboard />
+										<DashboardLayout />
 									</PrivateRoute>
-								}
-							/>
-							<Route
-								path="/archive"
-								element={
-									<PrivateRoute>
-										<ArchivePage />
-									</PrivateRoute>
-								}
-							/>
+								}>
+								<Route
+									index
+									element={<Navigate to="recommendations" replace />}
+								/>
+								<Route path="recommendations" element={<Recommendations />} />
+								<Route
+									path="recommendations/archive"
+									element={<ArchivePage />}
+								/>
+							</Route>
+
 							<Route path="*" element={<NotFoundPage />} />
 						</Routes>
 					</AuthProvider>
 				</ThemeProvider>
-				{/* Optional: React Query Devtools for easier debugging */}
+				{/* Tanstack React Query Devtools for easier debugging */}
 				<ReactQueryDevtools initialIsOpen={false} />
 			</QueryClientProvider>
 		</Router>

@@ -9,22 +9,22 @@ import { ReactComponent as GcpIcon } from "../../assets/icons/gcp.svg";
 interface RecommendationCardProps {
 	recommendation: Recommendation;
 	onClick?: () => void;
-	onArchiveUnarchive?: (id: string, isArchiving: boolean) => void;
+	onArchiveAction?: (id: string, isArchiving: boolean) => void;
 	isArchived?: boolean;
 }
 
 const RecommendationCard: React.FC<RecommendationCardProps> = ({
 	recommendation,
 	onClick,
-	onArchiveUnarchive,
+	onArchiveAction,
 	isArchived = false,
 }) => {
-	const handleArchiveClick = (e: React.MouseEvent) => {
+	/* const handleArchiveClick = (e: React.MouseEvent) => {
 		e.stopPropagation(); // Prevent card click from opening detail panel
-		if (onArchiveUnarchive) {
-			onArchiveUnarchive(recommendation.id, !isArchived);
+		if (onArchiveAction) {
+			onArchiveAction(recommendation.id, !isArchived);
 		}
-	};
+	}; */
 
 	const providerIcons: { [key: string]: JSX.Element } = {
 		"provider-0": <></>, // Unspecified
@@ -33,37 +33,17 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({
 		"provider-3": <GcpIcon className="w-6 h-6" />, // GCP
 	};
 
-	// Map class to a more readable category or just use title parts for tags if needed
-	const getCategoryFromClass = (classNum: number): string => {
-		switch (classNum) {
-			case 1:
-				return "Compute";
-			case 2:
-				return "Network";
-			case 3:
-				return "Data Protection";
-			case 4:
-				return "Application";
-			case 5:
-				return "Authentication";
-			case 6:
-				return "Compliance";
-			default:
-				return "Unspecified";
-		}
-	};
-
 	return (
 		<div
 			className={`bg-white dark:bg-gray-800- shadow-lg rounded-xl flex flex-col cursor-pointer w-full relative
         hover:shadow-xl transition-all duration-300 overflow-hidden
         `}
 			onClick={onClick}>
-			<button
+			{/* <button
 				onClick={handleArchiveClick}
 				className="w-fit font-medium py-2 px-2 rounded-lg transition-colors duration-200 text-sm flex gap-2 items-center absolute top-2 left-2 border bg-white/20 ">
 				<Archive size={14} color="white" />
-			</button>
+			</button> */}
 
 			<div className="flex h-full">
 				<div
