@@ -1,4 +1,11 @@
-import React, { useState, useRef, useCallback, useMemo } from "react";
+import React, {
+	useState,
+	useRef,
+	useCallback,
+	useMemo,
+	Suspense,
+	lazy,
+} from "react";
 import {
 	useInfiniteQuery,
 	useMutation,
@@ -16,10 +23,13 @@ import { useFilters } from "../context/FilterContext";
 import FilterDropdown from "../components/ui/FilterDropdown";
 import RecommendationLoader from "../components/loaders/RecommendationLoader";
 import { notify } from "../components/ui/Notify";
-import DetailSidePanel from "../components/layout/DetailSidePanel";
 import { Link } from "react-router-dom";
 
-const RecommendationsArchive: React.FC = () => {
+const DetailSidePanel = lazy(
+	() => import("../components/layout/DetailSidePanel")
+);
+
+const RecommendationsArchiveView: React.FC = () => {
 	const queryClient = useQueryClient();
 	const [selectedRecommendation, setSelectedRecommendation] =
 		useState<Recommendation | null>(null);
@@ -184,19 +194,19 @@ const RecommendationsArchive: React.FC = () => {
 
 	return (
 		<>
-			<header className="sticky top-0 left-0 flex flex-col gap-4 justify-between items-start p-6 bg-[#f3f4f6] z-10 w-full ">
+			<header className="sticky top-0 left-0 flex flex-col gap-4 justify-between items-start p-4 md:p-6 bg-[#f3f4f6] z-10 w-full ">
 				<div className="w-full flex justify-between items-center">
-					<div className="absolute top-3 flex text-xs  pl-10 lg:pl-0 items-center">
+					<div className="absolute top-3 flex text-sm md:text-xs  pl-11 lg:pl-0 items-center">
 						<Link className="text-gray-400" to={"/dashboard/recommendations"}>
 							Recommendations
 						</Link>{" "}
 						<ChevronRight size={14} /> <span>Archive</span>
 					</div>
 					<div className="flex items-center gap-3 mt-3">
-						<h1 className="text-2xl font-bold text-black pl-10 lg:pl-0">
+						<h1 className="text-xl md:text-2xl font-bold text-black pl-11 lg:pl-0">
 							Recommendations Archive
 						</h1>
-						<Archive />
+						<Archive size={20} />
 					</div>
 				</div>
 
@@ -208,7 +218,8 @@ const RecommendationsArchive: React.FC = () => {
 								placeholder="Search archived items..."
 								value={searchTerm}
 								onChange={handleSearchChange}
-								className="pl-10 pr-4 py-2 rounded-lg border border-gray-300 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary w-full"
+								className="pl-10 pr-4 py-1.5 rounded border border-gray-300 bg-gray-50 text-gray-900 focus:outline-none focus:ring-2 
+								focus:ring-primary w-full"
 							/>
 							<svg
 								className="absolute left-3 w-5 h-5 text-gray-400"
@@ -237,8 +248,8 @@ const RecommendationsArchive: React.FC = () => {
 				</div>
 			</header>
 
-			<main className="p-6 overflow-y-auto w-full">
-				<div className="grid grid-cols-1 gap-6">
+			<main className="p-4 md:p-6 overflow-y-auto w-full">
+				<div className="grid grid-cols-1 gap-4">
 					{isLoading &&
 						!isFetchingNextPage &&
 						Array.from({ length: 4 }).map((_, idx) => (
@@ -288,17 +299,18 @@ const RecommendationsArchive: React.FC = () => {
 					</div>
 				)}
 			</main>
-
-			{selectedRecommendation && (
-				<DetailSidePanel
-					recommendation={selectedRecommendation}
-					onClose={handleCloseDetailPanel}
-					onArchiveUnarchive={handleUnarchive}
-					isArchived={true}
-				/>
-			)}
+			<Suspense fallback={null}>
+				{selectedRecommendation && (
+					<DetailSidePanel
+						recommendation={selectedRecommendation}
+						onClose={handleCloseDetailPanel}
+						onArchiveUnarchive={handleUnarchive}
+						isArchived={true}
+					/>
+				)}
+			</Suspense>
 		</>
 	);
 };
 
-export default RecommendationsArchive;
+export default RecommendationsArchiveView;

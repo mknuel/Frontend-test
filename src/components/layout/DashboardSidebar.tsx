@@ -24,15 +24,15 @@ export default function Sidebar() {
 	const [isOpen, setIsOpen] = useState(false);
 
 	const navItems = [
-		{ name: "Dashboard", path: "", icon: <LayoutDashboard size={16} /> },
+		{ name: "Dashboard", path: "/dash", icon: <LayoutDashboard size={16} /> },
 		{
 			name: "Recommendations",
 			path: "/dashboard/recommendations",
 			icon: <Sparkles size={16} />,
 		},
-		{ name: "Policies", path: "", icon: <Clipboard size={16} /> },
-		{ name: "Events", path: "", icon: <FileSearch size={16} /> },
-		{ name: "Waivers", path: "", icon: <BadgeAlert size={16} /> },
+		{ name: "Policies", path: "/policies", icon: <Clipboard size={16} /> },
+		{ name: "Events", path: "/events", icon: <FileSearch size={16} /> },
+		{ name: "Waivers", path: "/waivers", icon: <BadgeAlert size={16} /> },
 	];
 
 	const toggleSidebar = () => setIsOpen(!isOpen);
@@ -47,6 +47,9 @@ export default function Sidebar() {
 		<>
 			{/* Hamburger for mobile */}
 			<button
+				aria-label={isOpen ? "Close sidebar" : "Open sidebar"}
+				aria-expanded={isOpen}
+				aria-controls="sidebar-navigation"
 				onClick={toggleSidebar}
 				className="lg:hidden fixed top-4 left-4 z-50 p-2 bg-white rounded-md shadow-md">
 				{isOpen ? <X size={20} /> : <Menu size={20} />}
@@ -62,11 +65,13 @@ export default function Sidebar() {
 
 			{/* Sidebar */}
 			<aside
+				role="complementary"
+				aria-label="Sidebar navigation"
 				className={`w-64 min-w-64 p-2 fixed lg:sticky top-0 left-0 h-screen border-r border-gray-200 z-50 transform transition-transform duration-300 ease-in-out
 				${theme === "dark" ? "bg-gray-800" : "bg-background-light"}
 				${isOpen ? "translate-x-0" : "-translate-x-full"} 
 				lg:translate-x-0 lg:flex`}>
-				<div className="flex flex-col h-full">
+				<div className="flex flex-col h-full w-full">
 					<div className="flex items-center h-16 mb-6">
 						<img
 							src="/images/logo.png"
@@ -76,7 +81,7 @@ export default function Sidebar() {
 					</div>
 
 					<p className="text-[#8b929b] font-medium text-xs mb-2">Platform</p>
-					<nav className="flex-1">
+					<nav aria-label="Main menu" className="flex-1">
 						<ul className="text-sm">
 							{navItems.map((item) => {
 								const regex = new RegExp(`^${item.path}(/|$)`);
@@ -107,8 +112,19 @@ export default function Sidebar() {
 					<div className="pt-4 mt-auto relative w-full">
 						{/* Profile row */}
 						<div
+							role="button"
+							tabIndex={0}
+							aria-haspopup="true"
+							aria-expanded={isMenuOpen}
+							aria-controls="user-menu"
 							className="flex gap-2 items-center cursor-pointer"
-							onClick={() => setIsMenuOpen((prev) => !prev)}>
+							onClick={() => setIsMenuOpen((prev) => !prev)}
+							onKeyDown={(e) => {
+								if (e.key === "Enter" || e.key === " ") {
+									e.preventDefault();
+									setIsMenuOpen((prev) => !prev);
+								}
+							}}>
 							<div className="rounded-lg bg-[#22d3ee] w-8 h-8 grid place-content-center text-sm">
 								YL
 							</div>
@@ -123,7 +139,10 @@ export default function Sidebar() {
 
 						{/* Dropdown menu */}
 						{isMenuOpen && (
-							<div className="absolute bottom-full mb-2 left-0 w-56 bg-white -dark:bg-gray-900 shadow-md rounded-md border z-50 text-sm">
+							<div
+								id="user-menu"
+								role="menu"
+								className="absolute bottom-full mb-2 left-0 w-56 bg-white -dark:bg-gray-900 shadow-md rounded-md border z-50 text-sm">
 								<ul>
 									<li className="px-4 py-3 flex items-center justify-between hover:bg-gray-100 -dark:hover:bg-gray-800 cursor-pointer">
 										<span>Dark Mode</span>
@@ -140,6 +159,7 @@ export default function Sidebar() {
 										</label>
 									</li>
 									<li
+										role="menuitem"
 										onClick={logout}
 										className="px-4 py-2 text-red-600 hover:bg-red-100 -dark:hover:bg-red-900 cursor-pointer">
 										Logout

@@ -3,9 +3,9 @@ import React from "react";
 const RecommendationLoader: React.FC = () => {
 	return (
 		<div className="bg-white -dark:bg-gray-800 shadow-lg rounded-xl flex flex-col w-full relative animate-pulse my-5">
-			<div className="flex h-full">
+			<div className="flex flex-col-reverse md:flex-row h-full">
 				{/* Icon Box */}
-				<div className="bg-gray-200 -dark:bg-gray-700 h-fill lg:aspect-square w-20 lg:w-36 lg:min-w-36 grid place-items-center">
+				<div className="bg-gray-200 -dark:bg-gray-700 h-fill lg:aspect-square w-full md:w-20 lg:w-36 lg:min-w-36 grid place-items-center">
 					<div className="w-8 h-8 bg-gray-300 rounded" />
 				</div>
 

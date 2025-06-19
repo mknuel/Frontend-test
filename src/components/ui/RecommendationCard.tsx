@@ -28,14 +28,15 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({
 
 	const providerIcons: { [key: string]: JSX.Element } = {
 		"provider-0": <></>, // Unspecified
-		"provider-1": <AWSIcon className="w-6 h-6" />, // AWS
-		"provider-2": <AzureIcon className="w-6 h-6" />, // Azure
-		"provider-3": <GcpIcon className="w-6 h-6" />, // GCP
+		"provider-1": <AWSIcon className="w-5 h-5" />, // AWS
+		"provider-2": <AzureIcon className="w-5 h-5" />, // Azure
+		"provider-3": <GcpIcon className="w-5 h-5" />, // GCP
 	};
 
 	return (
 		<div
 			className={`bg-white dark:bg-gray-800- shadow-lg rounded-xl flex flex-col cursor-pointer w-full relative
+				 animate-fade-in
         hover:shadow-xl transition-all duration-300 overflow-hidden
         `}
 			onClick={onClick}>
@@ -45,9 +46,9 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({
 				<Archive size={14} color="white" />
 			</button> */}
 
-			<div className="flex h-full">
+			<div className="flex flex-col-reverse md:flex-row h-full">
 				<div
-					className={`bg-primary h-fill lg:aspect-square w-20 lg:w-36 lg:min-w-36 grid place-items-center ${
+					className={`bg-primary h-fill lg:aspect-square w-full md:w-20 lg:w-36 lg:min-w-36 grid place-items-center ${
 						isArchived ? "opacity-70 grayscale" : ""
 					}`}>
 					<Box color="#fff" strokeWidth={3} size={32} />
@@ -76,7 +77,7 @@ const RecommendationCard: React.FC<RecommendationCardProps> = ({
 								recommendation.frameworks.map((framework, idx) => (
 									<span
 										key={`${framework}-${idx}`}
-										className="px-3 py-.5 bg-[#f3f4f6] rounded text-xs font-medium">
+										className="px-2 py-.5 bg-[#f3f4f6] rounded text-xs font-medium">
 										{framework?.name}
 									</span>
 								))}

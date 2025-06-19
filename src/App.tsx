@@ -14,10 +14,10 @@ import "./index.css";
 import Spinner from "./components/loaders/Spinner";
 
 // Lazy-loaded components
-const LoginPage = lazy(() => import("./pages/LoginPage"));
-const ArchivePage = lazy(() => import("./pages/RecommendationsArchive"));
-const NotFoundPage = lazy(() => import("./pages/NotFound"));
-const Recommendations = lazy(() => import("./pages/Recommendations"));
+const LoginPage = lazy(() => import("./routes/LoginPage"));
+const ArchivePage = lazy(() => import("./routes/RecommendationsArchive"));
+const NotFoundPage = lazy(() => import("./routes/NotFound"));
+const Recommendations = lazy(() => import("./routes/Recommendations"));
 const DashboardLayout = lazy(
 	() => import("./components/layout/DashboardLayout")
 );

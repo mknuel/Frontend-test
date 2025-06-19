@@ -113,11 +113,11 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
 
 	return (
 		<div className="relative group">
-			<button className="px-4 py-2.5 rounded-lg text-gray-900 flex items-center gap-2 border border-gray-300 hover:bg-gray-100 transition-colors text-sm -ml-2">
+			<button className="px-4 py-2 rounded text-gray-900 flex items-center gap-2 border border-gray-300 hover:bg-gray-100 transition-colors text-sm -ml-2">
 				<Funnel size={14} />
 				Filter
 				{activeFilterCount > 0 && (
-					<span className="bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+					<span className="bg-primary text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
 						{activeFilterCount}
 					</span>
 				)}
