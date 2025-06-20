@@ -141,10 +141,10 @@ export default function Sidebar() {
 
 							<div>
 								<h4 className="font-bold text-sm text-[#2d2d2d] dark:text-gray-100">
-									Yair lad
+									Admin
 								</h4>
 								<p className="font-medium text-xs -mt-1 text-gray-600 dark:text-gray-300">
-									yair@gmail.com
+									Admin@test.com
 								</p>
 							</div>
 
