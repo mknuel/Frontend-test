@@ -6,7 +6,7 @@ This is a web application designed to display, filter, and manage a list of secu
 
 ---
 
-## 🔗 Demo
+## 🔗 Preview
 
 **Login Credentials:**\
 Username: `admin`\
@@ -27,6 +27,7 @@ Password: `password`
 - **Dark/Light Theme**: Theme toggle with user preference saved.
 - **Responsive Design**: Works across mobile, tablet, and desktop.
 - **User Notifications**: Friendly toast messages for all key actions.
+- 
 
 ---
 
@@ -75,10 +76,9 @@ REACT_APP_BASE_URL=http://localhost:3001
 **Mock Backend:**
 
 ```bash
-cd mock-server
-npm run dev
+npm run server
 # or
-yarn dev
+yarn server
 ```
 
 Runs at `http://localhost:3001`
@@ -125,11 +125,38 @@ App available at `http://localhost:3000`
 - No direct fetch calls in components
 
 ---
-
 ## 🧪 Testing Approach
 
-- **Unit Tests**: For services (e.g., auth, recommendations) and helper functions
-- **Integration Tests**: Simulate user interactions using React Testing Library
+This project uses **Jest** and **React Testing Library** to ensure a reliable and maintainable codebase through both unit and integration testing.
+
+### ✅ Unit Tests
+- Cover **components**,**utility functions**, **services**, and **context providers** (e.g., authentication logic).
+- Focus on **isolated logic correctness**, independent of the DOM or UI.
+- **Examples**:
+  - Ensuring `AuthContext` sets and clears tokens correctly.
+  - Verifying data transformation or filtering helpers return the expected values.
+
+### ✅ Integration Tests
+- Use **React Testing Library** to simulate **real user interactions**.
+- Validate interaction between components, UI, and state.
+- **Examples**:
+  - Toggling filters in a dropdown updates the UI as expected.
+  - Verifying a user is redirected when not authenticated.
+
+### 🧩 Routing & Context Mocks
+- **`react-router-dom`** is mocked in test environments to avoid full routing dependency.
+- **Auth** and **Theme** contexts are wrapped or mocked to provide controlled values during tests.
+- This enables testing components in isolation without external dependencies breaking the flow.
+
+---
+
+> To run the test suite:
+
+```bash
+npm test
+# or
+yarn test
+
 
 Run all tests:
 
@@ -149,6 +176,8 @@ yarn test
 - **Skeleton Loaders**: Prevent jarring blank states
 - **Debounced Inputs**: Prevents excessive API calls
 - **Code Splitting**: Load chunks only when needed
+- **Dynamic imports**
+- 
 
 ---
 
@@ -168,9 +197,9 @@ Launches the test runner.
 
 Builds the app for production.
 
-### `npm run dev`
+### `npm run server`
 
-Starts the JSON mock server (inside `mock-server` folder).
+Starts the JSON mock server
 
 
 ## Comprehensive Documentation here
