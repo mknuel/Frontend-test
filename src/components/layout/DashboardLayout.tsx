@@ -1,10 +1,10 @@
 // src/components/layout/DashboardLayout.tsx
-import React from "react";
+import React, { lazy, Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import { useTheme } from "../../context/ThemeContext";
-import Sidebar from "./DashboardSidebar";
 import { FilterProvider } from "../../context/FilterContext";
 
+const Sidebar = lazy(() => import("./DashboardSidebar"));
 interface DashboardLayoutProps {}
 
 const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
@@ -19,7 +19,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = () => {
 						: "bg-background text-gray-900"
 				}`}>
 				{/* Sidebar */}
-				<Sidebar />
+				<Suspense fallback={null}>
+					<Sidebar />
+				</Suspense>
 
 				{/* Main Content Area */}
 				<div className="flex flex-col w-full">

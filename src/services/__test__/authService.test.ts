@@ -1,6 +1,6 @@
 // src/services/authService.test.ts
 
-import { loginUser } from "./authService";
+import { loginUser } from "../authService";
 
 // Mock the API base URL
 const API_BASE_URL = "http://localhost:3001";
