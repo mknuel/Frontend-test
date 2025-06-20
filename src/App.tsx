@@ -74,7 +74,7 @@ function App() {
 
 						<Suspense
 							fallback={
-								<div className="flex items-center justify-center min-h-screen bg-gray-100 -dark:bg-gray-900 text-gray-900 -dark:text-white">
+								<div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white">
 									<p className="text-xl">
 										<Spinner />
 									</p>

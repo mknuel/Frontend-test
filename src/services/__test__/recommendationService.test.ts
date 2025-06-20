@@ -7,8 +7,8 @@ import {
 	getArchivedRecommendations,
 	archiveRecommendation,
 	unarchiveRecommendation,
-} from "./recommendationService";
-import { ApiResponse, Recommendation } from "../types/recommendation";
+} from "../recommendationService";
+import { ApiResponse, Recommendation } from "../../types/recommendation";
 
 // Define a mock for the API base URL
 const API_BASE_URL = "http://localhost:3001";

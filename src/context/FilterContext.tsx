@@ -8,7 +8,7 @@ import {
 import { Recommendation } from "../types/recommendation";
 
 // Define the shape of the context state
-interface FilterContextState {
+export interface FilterContextState {
 	searchTerm: string;
 	setSearchTerm: (term: string) => void;
 	filterSearchTerm: string;

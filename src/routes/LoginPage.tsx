@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import { useTheme } from "../context/ThemeContext";
 import { loginUser } from "../services/authService";
 import { notify } from "../components/ui/Notify";
 import Spinner from "../components/loaders/Spinner";
+import { Sun, Moon } from "lucide-react";
 
 const LoginPage: React.FC = () => {
 	const [username, setUsername] = useState("");
@@ -11,6 +13,7 @@ const LoginPage: React.FC = () => {
 	const [error, setError] = useState("");
 	const [loading, setLoading] = useState(false);
 	const { login } = useAuth();
+	const { theme, toggleTheme } = useTheme();
 	const navigate = useNavigate();
 
 	const handleSubmit = async (e: React.FormEvent) => {
@@ -57,11 +60,25 @@ const LoginPage: React.FC = () => {
 		<main
 			role="main"
 			aria-labelledby="login-title"
-			className="flex items-center justify-center min-h-screen bg-gray-100 -dark:bg-gray-900 px-4 md:px-0">
-			<div className="p-8 bg-white -dark:bg-gray-800 rounded shadow-md w-full max-w-md">
+			className="flex items-center justify-center min-h-screen bg-background-light dark:bg-gray-700 px-4 md:px-0 relative">
+			{/* Theme Toggle Switch */}
+			<div className="absolute top-6 right-6">
+				<button
+					onClick={toggleTheme}
+					className="flex items-center justify-center w-12 h-12 bg-white dark:bg-gray-600 border border-gray-200 dark:border-gray-600 rounded-full shadow-md hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-gray-900"
+					aria-label={`Switch to ${theme === "light" ? "dark" : "light"} mode`}>
+					{theme === "light" ? (
+						<Moon className="w-5 h-5 text-gray-600 dark:text-gray-300" />
+					) : (
+						<Sun className="w-5 h-5 text-yellow-500" />
+					)}
+				</button>
+			</div>
+
+			<div className="p-8 bg-white dark:bg-gray-800 rounded-lg shadow-lg w-full max-w-md border border-gray-200 dark:border-gray-600">
 				<h2
 					id="login-title"
-					className="text-2xl font-bold mb-6 text-center text-gray-900 -dark:text-white">
+					className="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white font-helvetica">
 					Welcome Back!
 				</h2>
 
@@ -72,7 +89,7 @@ const LoginPage: React.FC = () => {
 
 					<div className="mb-4">
 						<label
-							className="block text-gray-700 -dark:text-gray-300 text-sm font-bold mb-2"
+							className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2 font-helvetica"
 							htmlFor="username">
 							Username:
 						</label>
@@ -82,7 +99,7 @@ const LoginPage: React.FC = () => {
 							name="username"
 							placeholder="Enter your username"
 							autoComplete="username"
-							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-primary -dark:bg-gray-700 -dark:text-white -dark:border-gray-600"
+							className="shadow-sm appearance-none border border-gray-200 dark:border-gray-600 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary dark:focus:ring-primary-dark placeholder-gray-400 dark:placeholder-gray-400 transition-colors"
 							value={username}
 							onChange={(e) => {
 								setUsername(e.target.value);
@@ -95,7 +112,7 @@ const LoginPage: React.FC = () => {
 
 					<div className="mb-6">
 						<label
-							className="block text-gray-700 -dark:text-gray-300 text-sm font-bold mb-2"
+							className="block text-gray-700 dark:text-gray-300 text-sm font-bold mb-2 font-helvetica"
 							htmlFor="password">
 							Password:
 						</label>
@@ -105,7 +122,7 @@ const LoginPage: React.FC = () => {
 							name="password"
 							placeholder="Enter your password"
 							autoComplete="current-password"
-							className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-primary -dark:bg-gray-700 -dark:text-white -dark:border-gray-600"
+							className="shadow-sm appearance-none border border-gray-200 dark:border-gray-600 rounded w-full py-2 px-3 text-gray-700 dark:text-gray-200 bg-white dark:bg-gray-700 mb-3 leading-tight focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary dark:focus:ring-primary-dark placeholder-gray-400 dark:placeholder-gray-400 transition-colors"
 							value={password}
 							onChange={(e) => {
 								setPassword(e.target.value);
@@ -118,7 +135,7 @@ const LoginPage: React.FC = () => {
 
 					{error && (
 						<p
-							className="text-red-500 text-sm mb-4 -mt-3"
+							className="text-red-500 dark:text-red-400 text-sm mb-4 -mt-3"
 							role="alert"
 							aria-live="assertive">
 							{error}
@@ -129,7 +146,7 @@ const LoginPage: React.FC = () => {
 						<button
 							type="submit"
 							aria-label="Sign in to your account"
-							className="bg-primary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary -dark:bg-primary -dark:hover:bg-blue-800 w-full transition-all">
+							className="bg-primary hover:bg-primary-dark dark:bg-primary-dark dark:hover:bg-primary text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary dark:ring-offset-gray-800 w-full transition-all duration-200 font-helvetica">
 							{loading ? <Spinner /> : <span>Sign In</span>}
 						</button>
 					</div>

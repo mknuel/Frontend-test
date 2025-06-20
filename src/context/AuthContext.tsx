@@ -1,4 +1,3 @@
-// src/context/AuthContext.tsx
 import React, {
 	createContext,
 	useContext,
@@ -6,6 +5,7 @@ import React, {
 	useEffect,
 	ReactNode,
 } from "react";
+import { jwtDecode } from "jwt-decode";
 
 interface AuthContextType {
 	isAuthenticated: boolean;
@@ -14,20 +14,42 @@ interface AuthContextType {
 	logout: () => void;
 }
 
+interface JwtPayload {
+	exp?: number; // Expiry is optional
+	// You can define additional fields based on your token structure
+	// e.g., email?: string, userId?: string, etc.
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: ReactNode }> = ({
 	children,
 }) => {
-	const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-	const [isLoading, setIsLoading] = useState<boolean>(true); // To handle initial token check
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 
 	useEffect(() => {
-		// Check for token in localStorage on component mount
 		const token = localStorage.getItem("authToken");
 		if (token) {
-			// In a real app, you'd validate the token with your backend here
-			setIsAuthenticated(true);
+			try {
+				const decoded: JwtPayload = jwtDecode(token);
+
+				console.log(decoded);
+				const now = Date.now() / 1000; // in seconds
+
+				if (decoded.exp && decoded.exp < now) {
+					// Token expired
+					localStorage.removeItem("authToken");
+					setIsAuthenticated(false);
+				} else {
+					setIsAuthenticated(true);
+				}
+			} catch (error) {
+				// Invalid token
+				console.error("Invalid token:", error);
+				localStorage.removeItem("authToken");
+				setIsAuthenticated(false);
+			}
 		}
 		setIsLoading(false);
 	}, []);

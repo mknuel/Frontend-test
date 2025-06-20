@@ -1,6 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
 	content: ["./src/**/*.{js,jsx,ts,tsx}"],
+	// IMPORTANT: Use 'class' strategy to override system preference
+	darkMode: "class",
 	theme: {
 		extend: {
 			colors: {
@@ -14,16 +16,14 @@ module.exports = {
 			fontFamily: {
 				helvetica: ["Helvetica", "sans-serif"],
 			},
-			extend: {
-				keyframes: {
-					"fade-in": {
-						"0%": { opacity: "0", transform: "translateY(1rem)" },
-						"100%": { opacity: "1", transform: "translateY(0)" },
-					},
+			keyframes: {
+				"fade-in": {
+					"0%": { opacity: "0", transform: "translateY(1rem)" },
+					"100%": { opacity: "1", transform: "translateY(0)" },
 				},
-				animation: {
-					"fade-in": "fade-in 0.5s ease-out forwards",
-				},
+			},
+			animation: {
+				"fade-in": "fade-in 0.5s ease-out forwards",
 			},
 		},
 	},
