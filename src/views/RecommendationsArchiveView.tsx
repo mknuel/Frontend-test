@@ -1,11 +1,4 @@
-import React, {
-	useState,
-	useRef,
-	useCallback,
-	useMemo,
-	Suspense,
-	lazy,
-} from "react";
+import React, { useState, useRef, useCallback, Suspense, lazy } from "react";
 import {
 	useInfiniteQuery,
 	useMutation,
@@ -23,12 +16,16 @@ import { useFilters } from "../context/FilterContext";
 import FilterDropdown from "../components/ui/FilterDropdown";
 import RecommendationLoader from "../components/loaders/RecommendationLoader";
 import { notify } from "../components/ui/Notify";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 const DetailSidePanel = lazy(
 	() => import("../components/layout/DetailSidePanel")
 );
 
+interface UnarchiveSuccessResponse {
+	message: string;
+	recommendation?: Recommendation;
+}
 const RecommendationsArchiveView: React.FC = () => {
 	const queryClient = useQueryClient();
 	const [selectedRecommendation, setSelectedRecommendation] =
@@ -82,29 +79,12 @@ const RecommendationsArchiveView: React.FC = () => {
 			return lastPage.pagination.cursor.next || undefined;
 		},
 		initialPageParam: null,
+		staleTime: 0,
 	});
 
 	const archivedRecommendations: Recommendation[] =
 		data?.pages.flatMap((page) => page.data) || [];
 	const totalItems: number = data?.pages[0]?.pagination.totalItems || 0;
-
-	// Extract available tags for the FilterDropdown 
-	const availableTags = useMemo(() => {
-		// noticed that tags are not being returned from the server, thereby preventing the filters
-		// Get tags from the first page of results
-		const tags = data?.pages[0]?.availableTags;
-		return {
-			providers: tags?.providers?.sort() || [],
-			frameworks: tags?.frameworks?.sort() || [],
-			classes: tags?.classes?.sort() || [],
-			reasons: tags?.reasons?.sort() || [],
-		};
-	}, [data?.pages]);
-
-	interface UnarchiveSuccessResponse {
-		message: string;
-		recommendation?: Recommendation;
-	}
 
 	const handleCloseDetailPanel = () => setSelectedRecommendation(null);
 
@@ -240,12 +220,7 @@ const RecommendationsArchiveView: React.FC = () => {
 							</svg>
 						</div>
 
-						<FilterDropdown
-							availableProviders={availableTags.providers}
-							availableFrameworks={availableTags.frameworks}
-							availableRiskClasses={availableTags.classes}
-							availableReasons={availableTags.reasons}
-						/>
+						<FilterDropdown />
 					</div>
 					<p className="text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap w-full md:w-fit">
 						Showing {archivedRecommendations.length} of {totalItems} results
@@ -280,20 +255,18 @@ const RecommendationsArchiveView: React.FC = () => {
 
 					{!isLoading &&
 						archivedRecommendations.map((rec, index) => (
-							<div
+							<RecommendationCard
 								ref={
 									archivedRecommendations.length === index + 1
 										? lastRecommendationElementRef
 										: null
 								}
-								key={rec.recommendationId}>
-								<RecommendationCard
-									recommendation={rec}
-									onArchiveAction={() => handleUnarchive(rec.recommendationId)}
-									isArchived={true}
-									onClick={() => handleCardClick(rec)}
-								/>
-							</div>
+								key={rec.recommendationId}
+								recommendation={rec}
+								onArchiveAction={() => handleUnarchive(rec.recommendationId)}
+								isArchived={true}
+								onClick={() => handleCardClick(rec)}
+							/>
 						))}
 				</div>
 

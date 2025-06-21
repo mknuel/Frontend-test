@@ -1,5 +1,3 @@
-// src/services/recommendationService.test.ts
-
 import {
 	getProviderNameFromId,
 	getRecommendations,

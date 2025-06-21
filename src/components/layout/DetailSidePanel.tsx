@@ -6,6 +6,7 @@ import {
 	Box,
 	Boxes,
 	ChartColumnIncreasing,
+	ExternalLink,
 	OctagonAlert,
 	TriangleAlert,
 } from "lucide-react";
@@ -29,22 +30,21 @@ const DetailSidePanel: React.FC<DetailSidePanelProps> = ({
 	isArchived = false,
 }) => {
 	const [isVisible, setIsVisible] = useState(false);
-const ref= useRef<HTMLDivElement>(null)
+	const ref = useRef<HTMLDivElement>(null);
 	useEffect(() => {
 		const timeout = setTimeout(() => setIsVisible(true), 10);
 		return () => clearTimeout(timeout);
 	}, []);
 
-	
-		const handleClose = () => {
-			setIsVisible(false);
-			setTimeout(() => {
-				onClose();
-			}, 300);
-		};
-		
+	const handleClose = () => {
+		setIsVisible(false);
+		setTimeout(() => {
+			onClose();
+		}, 300);
+	};
+
 	// Keyboard compatibility and out focus close
-	useOutFocusClose(ref, handleClose)
+	useOutFocusClose(ref, handleClose);
 
 	const handleArchiveClick = () => {
 		onArchiveUnarchive(recommendation.recommendationId, true);
@@ -60,7 +60,6 @@ const ref= useRef<HTMLDivElement>(null)
 	return (
 		<div
 			role="dialog"
-		
 			aria-modal="true"
 			aria-labelledby="sidepanel-title"
 			className="fixed inset-0 z-[999] flex justify-end">
@@ -281,8 +280,10 @@ const ref= useRef<HTMLDivElement>(null)
 								href={item?.href}
 								key={`read-${index}`}
 								aria-label={`Further reading: ${item?.name}`}
-								className="px-3 py-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-full text-xs font-medium whitespace-pre first-letter:capitalize transition-colors hover:opacity-80">
+								className="px-3 py-1  text-gray-800 dark:text-gray-200 rounded-full text-xs font-medium whitespace-pre first-letter:capitalize transition-colors hover:opacity-80 inline-flex gap-2">
 								{item?.name}
+
+								<ExternalLink size={16} />
 							</a>
 						))}
 					</div>
@@ -301,9 +302,7 @@ const ref= useRef<HTMLDivElement>(null)
 						{isArchived ? <span>Unarchive</span> : <span>Archive</span>}
 					</button>
 
-					<button
-						onClick={handleArchiveClick}
-						className="w-fit font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-sm flex text-white items-center bg-primary hover:opacity-90">
+					<button className="w-fit font-medium py-3 px-4 rounded-lg transition-colors duration-200 text-sm flex text-white items-center bg-primary hover:opacity-90">
 						Configure Policy
 					</button>
 				</div>

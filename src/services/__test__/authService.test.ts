@@ -1,5 +1,3 @@
-// src/services/authService.test.ts
-
 import { loginUser } from "../authService";
 
 // Mock the API base URL

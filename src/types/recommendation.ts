@@ -64,3 +64,10 @@ export interface ApiResponse {
 		classes?: string[];
 	};
 }
+
+export interface AvailableTags {
+	providers: string[];
+	frameworks: string[];
+	classes: string[];
+	reasons: string[];
+}

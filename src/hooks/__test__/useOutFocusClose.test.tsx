@@ -1,6 +1,6 @@
 import { render, fireEvent } from "@testing-library/react";
 import React, { useRef, useState } from "react";
-import { useOutFocusClose } from "../useOutFocusClose"; // adjust path as needed
+import { useOutFocusClose } from "../useOutFocusClose";
 
 describe("useOutFocusClose", () => {
 	it("calls handler on outside click", () => {

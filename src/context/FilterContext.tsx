@@ -1,13 +1,26 @@
 // src/contexts/FilterContext.tsx
-import React, { createContext, useState, useContext, useMemo } from "react";
+import React, {
+	createContext,
+	useState,
+	useContext,
+	useMemo,
+	useEffect,
+} from "react";
 import { useQuery } from "@tanstack/react-query";
 import {
 	getAllRecommendationsForCounting,
 	getProviderNameFromId,
 } from "../services/recommendationService";
 import { Recommendation } from "../types/recommendation";
+import { useLocation } from "react-router";
 
-// Define the shape of the context state
+interface AvailableFilters {
+	providers: string[];
+	frameworks: string[];
+	riskClasses: string[];
+	reasons: string[];
+}
+
 export interface FilterContextState {
 	searchTerm: string;
 	setSearchTerm: (term: string) => void;
@@ -25,6 +38,8 @@ export interface FilterContextState {
 	activeFilterCount: number;
 	tagCounts: Record<string, number>;
 	isCountLoading: boolean;
+	availableFilters: AvailableFilters;
+	isFilterLoading: boolean;
 }
 
 const FilterContext = createContext<FilterContextState | undefined>(undefined);
@@ -36,6 +51,7 @@ const toggleItem = (list: string[], item: string): string[] => {
 export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
+	const location = useLocation();
 	const [searchTerm, setSearchTerm] = useState("");
 	const [filterSearchTerm, setFilterSearchTerm] = useState("");
 	const [selectedProviders, setSelectedProviders] = useState<string[]>([]);
@@ -43,12 +59,10 @@ export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [selectedRiskClasses, setSelectedRiskClasses] = useState<string[]>([]);
 	const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
 
-	// Query to fetch all data for counting, depends only on the main search term.
+	// Fetch tag counts
 	const { data: tagCounts = {}, isLoading: isCountLoading } = useQuery<
 		Record<string, number>,
-		Error,
-		Record<string, number>,
-		[string, string]
+		Error
 	>({
 		queryKey: ["tagCounts", searchTerm],
 		queryFn: async () => {
@@ -56,25 +70,58 @@ export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({
 			const counts: Record<string, number> = {};
 
 			allRecs.forEach((rec: Recommendation) => {
-				// Count providers
 				rec.provider.forEach((providerId) => {
 					const providerName = getProviderNameFromId(providerId);
 					counts[providerName] = (counts[providerName] || 0) + 1;
 				});
-				// Count frameworks
 				rec.frameworks?.forEach((framework) => {
 					counts[framework.name] = (counts[framework.name] || 0) + 1;
 				});
-				// Count classes
 				if (rec.class) {
 					counts[rec.class] = (counts[rec.class] || 0) + 1;
 				}
-				// Count reasons
 				rec.reasons?.forEach((reason) => {
 					counts[reason] = (counts[reason] || 0) + 1;
 				});
 			});
 			return counts;
+		},
+	});
+
+	// Fetch available filter values
+	const {
+		data: availableFilters = {
+			providers: [],
+			frameworks: [],
+			riskClasses: [],
+			reasons: [],
+		},
+		isLoading: isFilterLoading,
+	} = useQuery<AvailableFilters>({
+		queryKey: ["availableFilters", searchTerm],
+		queryFn: async () => {
+			const allRecs = await getAllRecommendationsForCounting(searchTerm);
+
+			const providers = new Set<string>();
+			const frameworks = new Set<string>();
+			const riskClasses = new Set<string>();
+			const reasons = new Set<string>();
+
+			allRecs.forEach((rec) => {
+				rec.provider.forEach((id) => {
+					providers.add(getProviderNameFromId(id));
+				});
+				rec.frameworks?.forEach((fw) => frameworks.add(fw.name));
+				if (rec.class) riskClasses.add(`${rec.class}`);
+				rec.reasons?.forEach((r) => reasons.add(r));
+			});
+
+			return {
+				providers: Array.from(providers),
+				frameworks: Array.from(frameworks),
+				riskClasses: Array.from(riskClasses),
+				reasons: Array.from(reasons),
+			};
 		},
 	});
 
@@ -126,7 +173,13 @@ export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({
 		activeFilterCount,
 		tagCounts,
 		isCountLoading,
+		availableFilters,
+		isFilterLoading,
 	};
+
+	useEffect(() => {
+		clearAllFilters();
+	}, [location.pathname]);
 
 	return (
 		<FilterContext.Provider value={value}>{children}</FilterContext.Provider>

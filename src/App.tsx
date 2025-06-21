@@ -1,10 +1,5 @@
 import React, { lazy, Suspense } from "react";
-import {
-	BrowserRouter as Router,
-	Routes,
-	Route,
-	Navigate,
-} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router";
 import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ThemeProvider } from "./context/ThemeContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -75,9 +70,9 @@ function App() {
 						<Suspense
 							fallback={
 								<div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white">
-									<p className="text-xl">
+									<div className="text-xl">
 										<Spinner />
-									</p>
+									</div>
 								</div>
 							}>
 							<Routes>
