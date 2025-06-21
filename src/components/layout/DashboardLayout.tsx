@@ -1,6 +1,6 @@
 // src/components/layout/DashboardLayout.tsx
 import React, { lazy, Suspense } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet } from "react-router";
 import { useTheme } from "../../context/ThemeContext";
 import { FilterProvider } from "../../context/FilterContext";
 

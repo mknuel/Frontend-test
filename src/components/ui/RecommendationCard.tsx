@@ -1,11 +1,12 @@
 // src/components/ui/RecommendationCard.tsx
-import React, { forwardRef, JSX } from "react";
+import React, { forwardRef, JSX, useState } from "react";
 import { motion } from "framer-motion";
 import { Recommendation } from "../../types/recommendation";
-import { /* Archive, */ Box } from "lucide-react";
+import { /* Archive, */ Archive, Box } from "lucide-react";
 import { ReactComponent as AWSIcon } from "../../assets/icons/aws.svg";
 import { ReactComponent as AzureIcon } from "../../assets/icons/azure.svg";
 import { ReactComponent as GcpIcon } from "../../assets/icons/gcp.svg";
+import Spinner from "../loaders/Spinner";
 
 interface RecommendationCardProps {
 	recommendation: Recommendation;
@@ -14,21 +15,15 @@ interface RecommendationCardProps {
 	isArchived?: boolean;
 }
 const RecommendationCard = forwardRef<HTMLDivElement, RecommendationCardProps>(
-	(
-		{
-			recommendation,
-			onClick,
-			// onArchiveAction,
-			isArchived = false,
-		},
-		ref
-	) => {
-		/* const handleArchiveClick = (e: React.MouseEvent) => {
-		e.stopPropagation(); // Prevent card click from opening detail panel
-		if (onArchiveAction) {
-			onArchiveAction(recommendation.id, !isArchived);
-		}
-	}; */
+	({ recommendation, onClick, onArchiveAction, isArchived = false }, ref) => {
+		const [isLoading, setIsLoading] = useState<boolean>(false);
+		const handleArchiveClick = (e: React.MouseEvent) => {
+			e.stopPropagation(); // Prevent card click from opening detail panel
+			if (onArchiveAction) {
+				setIsLoading(true);
+				onArchiveAction(recommendation.recommendationId, !isArchived);
+			}
+		};
 
 		const providerIcons: { [key: string]: JSX.Element } = {
 			"provider-0": <></>, // Unspecified
@@ -84,11 +79,17 @@ const RecommendationCard = forwardRef<HTMLDivElement, RecommendationCardProps>(
         ${isArchived ? "opacity-70" : ""}
         `}
 				onClick={onClick}>
-				{/* <button
-				onClick={handleArchiveClick}
-				className="w-fit font-medium py-2 px-2 rounded-lg transition-colors duration-200 text-sm flex gap-2 items-center absolute top-2 left-2 border bg-white/20 dark:bg-black/20">
-				<Archive size={14} color="white" />
-			</button> */}
+				<button
+					onClick={handleArchiveClick}
+					className={
+						"w-fit font-medium py-2 px-2 rounded-lg transition-colors duration-200 text-sm flex gap-2 items-center absolute top-2 left-2 border bg-white/20 dark:bg-black/20 z-10"
+					}>
+					{isLoading ? (
+						<Spinner className="!w-4 !h-4 m-0 p-0" />
+					) : (
+						<Archive size={14} color={isArchived ? "#fff" : "white"} />
+					)}
+				</button>
 
 				<div className="flex flex-col-reverse md:flex-row h-full">
 					<motion.div

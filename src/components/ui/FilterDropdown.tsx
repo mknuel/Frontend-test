@@ -1,20 +1,9 @@
+// src/components/FilterDropdown.tsx
 import React, { useMemo, useEffect, useState } from "react";
 import { Funnel, XCircle } from "lucide-react";
 import { useFilters } from "../../context/FilterContext";
 
-interface FilterDropdownProps {
-	availableProviders: string[];
-	availableFrameworks: string[];
-	availableRiskClasses: string[];
-	availableReasons: string[];
-}
-
-const FilterDropdown: React.FC<FilterDropdownProps> = ({
-	availableProviders,
-	availableFrameworks,
-	availableRiskClasses,
-	availableReasons,
-}) => {
+const FilterDropdown: React.FC = () => {
 	const {
 		filterSearchTerm,
 		setFilterSearchTerm,
@@ -30,9 +19,10 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
 		activeFilterCount,
 		tagCounts,
 		isCountLoading,
+		availableFilters,
+		isFilterLoading,
 	} = useFilters();
 
-	// Debounced term
 	const [debouncedTerm, setDebouncedTerm] = useState(filterSearchTerm);
 
 	useEffect(() => {
@@ -52,20 +42,20 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
 	};
 
 	const filteredProviders = useMemo(
-		() => getFilteredItems(availableProviders, debouncedTerm),
-		[availableProviders, debouncedTerm]
+		() => getFilteredItems(availableFilters.providers, debouncedTerm),
+		[availableFilters.providers, debouncedTerm]
 	);
 	const filteredFrameworks = useMemo(
-		() => getFilteredItems(availableFrameworks, debouncedTerm),
-		[availableFrameworks, debouncedTerm]
+		() => getFilteredItems(availableFilters.frameworks, debouncedTerm),
+		[availableFilters.frameworks, debouncedTerm]
 	);
 	const filteredRiskClasses = useMemo(
-		() => getFilteredItems(availableRiskClasses, debouncedTerm),
-		[availableRiskClasses, debouncedTerm]
+		() => getFilteredItems(availableFilters.riskClasses, debouncedTerm),
+		[availableFilters.riskClasses, debouncedTerm]
 	);
 	const filteredReasons = useMemo(
-		() => getFilteredItems(availableReasons, debouncedTerm),
-		[availableReasons, debouncedTerm]
+		() => getFilteredItems(availableFilters.reasons, debouncedTerm),
+		[availableFilters.reasons, debouncedTerm]
 	);
 
 	const totalFilteredItems =
@@ -153,12 +143,12 @@ const FilterDropdown: React.FC<FilterDropdownProps> = ({
 				</div>
 
 				<div className="flex flex-col max-h-96 overflow-y-auto">
-					{isCountLoading && (
+					{(isCountLoading || isFilterLoading) && (
 						<div className="p-4 text-center text-sm text-gray-500 dark:text-gray-400">
-							Loading counts...
+							Loading filters...
 						</div>
 					)}
-					{!isCountLoading && (
+					{!(isCountLoading || isFilterLoading) && (
 						<>
 							{renderFilterSection(
 								"Cloud Providers",

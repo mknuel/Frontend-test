@@ -1,13 +1,4 @@
-// src/pages/Recommendations.tsx
-
-import React, {
-	useState,
-	useRef,
-	useCallback,
-	useMemo,
-	Suspense,
-	lazy,
-} from "react";
+import React, { useState, useRef, useCallback, Suspense, lazy } from "react";
 import {
 	getRecommendations,
 	archiveRecommendation,
@@ -25,11 +16,17 @@ import { notify } from "../components/ui/Notify";
 import { useFilters } from "../context/FilterContext";
 import FilterDropdown from "../components/ui/FilterDropdown";
 import RecommendationLoader from "../components/loaders/RecommendationLoader";
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 import { motion } from "framer-motion";
+
 const DetailSidePanel = lazy(
 	() => import("../components/layout/DetailSidePanel")
 );
+
+interface ArchiveMutationSuccess {
+	message: string;
+	recommendation?: Recommendation;
+}
 const RecommendationsView: React.FC = () => {
 	const queryClient = useQueryClient();
 	const [selectedRecommendation, setSelectedRecommendation] =
@@ -89,21 +86,6 @@ const RecommendationsView: React.FC = () => {
 	const recommendations: Recommendation[] =
 		data?.pages.flatMap((page) => page.data) || [];
 	const totalItems: number = data?.pages[0]?.pagination.totalItems || 0;
-
-	const availableTags = useMemo(() => {
-		const tags = data?.pages[0]?.availableTags;
-		return {
-			providers: tags?.providers?.sort() || [],
-			frameworks: tags?.frameworks?.sort() || [],
-			classes: tags?.classes?.sort() || [],
-			reasons: tags?.reasons?.sort() || [],
-		};
-	}, [data?.pages]);
-
-	interface ArchiveMutationSuccess {
-		message: string;
-		recommendation?: Recommendation;
-	}
 
 	// This mutation logic avoids race conditions by invalidating queries only after the server confirms success.
 	const archiveMutation = useMutation<ArchiveMutationSuccess, Error, string>({
@@ -197,12 +179,7 @@ const RecommendationsView: React.FC = () => {
 							</svg>
 						</div>
 
-						<FilterDropdown
-							availableProviders={availableTags.providers}
-							availableFrameworks={availableTags.frameworks}
-							availableRiskClasses={availableTags.classes}
-							availableReasons={availableTags.reasons}
-						/>
+						<FilterDropdown />
 					</div>
 					<p className="text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap w-full md:w-fit ">
 						Showing{" "}
