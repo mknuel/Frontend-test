@@ -144,7 +144,6 @@ This project uses **Jest** and **React Testing Library** to ensure a reliable an
   - Verifying a user is redirected when not authenticated.
 
 ### 🧩 Routing & Context Mocks
-- **`react-router-dom`** is mocked in test environments to avoid full routing dependency.
 - **Auth** and **Theme** contexts are wrapped or mocked to provide controlled values during tests.
 - This enables testing components in isolation without external dependencies breaking the flow.
 
