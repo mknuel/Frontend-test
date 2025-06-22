@@ -82,7 +82,7 @@ const RecommendationCard = forwardRef<HTMLDivElement, RecommendationCardProps>(
 				<button
 					onClick={handleArchiveClick}
 					className={
-						"w-fit font-medium py-2 px-2 rounded-lg transition-colors duration-200 text-sm flex gap-2 items-center absolute top-2 left-2 border bg-white/20 dark:bg-black/20 z-10"
+						"w-fit font-medium py-2 px-2 rounded-lg transition-colors duration-200 text-sm flex gap-2 items-center absolute top-2 left-2 border bg-white/20 dark:bg-black/20 z-1"
 					}>
 					{isLoading ? (
 						<Spinner className="!w-4 !h-4 m-0 p-0" />
@@ -91,9 +91,9 @@ const RecommendationCard = forwardRef<HTMLDivElement, RecommendationCardProps>(
 					)}
 				</button>
 
-				<div className="flex flex-col-reverse md:flex-row h-full">
+				<div className="flex flex-col md:flex-row h-full">
 					<motion.div
-						className={`bg-primary dark:bg-primary h-fill lg:aspect-square w-full md:w-20 lg:w-36 lg:min-w-36 grid place-items-center ${
+						className={`bg-primary dark:bg-primary h-fill lg:aspect-square w-full md:w-20 lg:w-36 lg:min-w-36 grid place-items-center py-2 md:py-0 ${
 							isArchived ? "opacity-70 grayscale" : ""
 						}`}>
 						<motion.div
