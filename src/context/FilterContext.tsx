@@ -21,6 +21,11 @@ interface AvailableFilters {
 	reasons: string[];
 }
 
+interface CombinedFilterData {
+	availableFilters: AvailableFilters;
+	tagCounts: Record<string, number>;
+}
+
 export interface FilterContextState {
 	searchTerm: string;
 	setSearchTerm: (term: string) => void;
@@ -44,9 +49,8 @@ export interface FilterContextState {
 
 const FilterContext = createContext<FilterContextState | undefined>(undefined);
 
-const toggleItem = (list: string[], item: string): string[] => {
-	return list.includes(item) ? list.filter((i) => i !== item) : [...list, item];
-};
+const toggleItem = (list: string[], item: string): string[] =>
+	list.includes(item) ? list.filter((i) => i !== item) : [...list, item];
 
 export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
@@ -59,46 +63,12 @@ export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({
 	const [selectedRiskClasses, setSelectedRiskClasses] = useState<string[]>([]);
 	const [selectedReasons, setSelectedReasons] = useState<string[]>([]);
 
-	// Fetch tag counts
-	const { data: tagCounts = {}, isLoading: isCountLoading } = useQuery<
-		Record<string, number>,
+	// Combined query for availableFilters + tagCounts
+	const { data, isLoading: isFilterLoading } = useQuery<
+		CombinedFilterData,
 		Error
 	>({
-		queryKey: ["tagCounts", searchTerm],
-		queryFn: async () => {
-			const allRecs = await getAllRecommendationsForCounting(searchTerm);
-			const counts: Record<string, number> = {};
-
-			allRecs.forEach((rec: Recommendation) => {
-				rec.provider.forEach((providerId) => {
-					const providerName = getProviderNameFromId(providerId);
-					counts[providerName] = (counts[providerName] || 0) + 1;
-				});
-				rec.frameworks?.forEach((framework) => {
-					counts[framework.name] = (counts[framework.name] || 0) + 1;
-				});
-				if (rec.class) {
-					counts[rec.class] = (counts[rec.class] || 0) + 1;
-				}
-				rec.reasons?.forEach((reason) => {
-					counts[reason] = (counts[reason] || 0) + 1;
-				});
-			});
-			return counts;
-		},
-	});
-
-	// Fetch available filter values
-	const {
-		data: availableFilters = {
-			providers: [],
-			frameworks: [],
-			riskClasses: [],
-			reasons: [],
-		},
-		isLoading: isFilterLoading,
-	} = useQuery<AvailableFilters>({
-		queryKey: ["availableFilters", searchTerm],
+		queryKey: ["filterMeta", searchTerm],
 		queryFn: async () => {
 			const allRecs = await getAllRecommendationsForCounting(searchTerm);
 
@@ -106,24 +76,51 @@ export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({
 			const frameworks = new Set<string>();
 			const riskClasses = new Set<string>();
 			const reasons = new Set<string>();
+			const tagCounts: Record<string, number> = {};
 
-			allRecs.forEach((rec) => {
-				rec.provider.forEach((id) => {
-					providers.add(getProviderNameFromId(id));
+			allRecs.forEach((rec: Recommendation) => {
+				rec.provider.forEach((providerId) => {
+					const name = getProviderNameFromId(providerId);
+					providers.add(name);
+					tagCounts[name] = (tagCounts[name] || 0) + 1;
 				});
-				rec.frameworks?.forEach((fw) => frameworks.add(fw.name));
-				if (rec.class) riskClasses.add(`${rec.class}`);
-				rec.reasons?.forEach((r) => reasons.add(r));
+				rec.frameworks?.forEach((fw) => {
+					frameworks.add(fw.name);
+					tagCounts[fw.name] = (tagCounts[fw.name] || 0) + 1;
+				});
+				if (rec.class) {
+					const cls = `${rec.class}`;
+					riskClasses.add(cls);
+					tagCounts[cls] = (tagCounts[cls] || 0) + 1;
+				}
+				rec.reasons?.forEach((r) => {
+					reasons.add(r);
+					tagCounts[r] = (tagCounts[r] || 0) + 1;
+				});
 			});
 
 			return {
-				providers: Array.from(providers),
-				frameworks: Array.from(frameworks),
-				riskClasses: Array.from(riskClasses),
-				reasons: Array.from(reasons),
+				availableFilters: {
+					providers: Array.from(providers),
+					frameworks: Array.from(frameworks),
+					riskClasses: Array.from(riskClasses),
+					reasons: Array.from(reasons),
+				},
+				tagCounts,
 			};
 		},
+		staleTime: 1000 * 60 * 60 * 24, // 24h
 	});
+
+	const availableFilters = data?.availableFilters ?? {
+		providers: [],
+		frameworks: [],
+		riskClasses: [],
+		reasons: [],
+	};
+
+	const tagCounts = data?.tagCounts ?? {};
+	const isCountLoading = isFilterLoading;
 
 	const toggleProvider = (name: string) =>
 		setSelectedProviders((prev) => toggleItem(prev, name));
@@ -156,7 +153,7 @@ export const FilterProvider: React.FC<{ children: React.ReactNode }> = ({
 		selectedReasons,
 	]);
 
-	const value = {
+	const value: FilterContextState = {
 		searchTerm,
 		setSearchTerm,
 		filterSearchTerm,
