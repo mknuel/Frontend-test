@@ -8,6 +8,9 @@ This is a web application designed to display, filter, and manage a list of secu
 
 ## 🔗 Preview
 
+**Video Demo**
+https://www.loom.com/share/0ea82b3653d24fec9b1e21bca3ad59af?sid=4df990fa-daf8-42dd-9374-2188521cbea4
+
 **Login Credentials:**\
 Username: `admin`\
 Password: `password`
